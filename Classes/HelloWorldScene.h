@@ -36,9 +36,27 @@ public:
     
     // a selector callback
     void menuCloseCallback(cocos2d::Ref* pSender);
+
+	//関数の宣言
+	void update(float delta) override;
+
+	void changeOpacity();
     
     // implement the "static create()" method manually
     CREATE_FUNC(HelloWorld);
+
+	//スプライト
+	cocos2d::Sprite* sprite;
+
+	int sNum;
+
+	cocos2d::Vec2*  v;
+
+	cocos2d::Vec2 vl[4];
+
+	cocos2d::Vec2 sp[4];
+
+	float counter;
 };
 
 #endif // __HELLOWORLD_SCENE_H__

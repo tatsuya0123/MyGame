@@ -117,9 +117,43 @@ bool HelloWorld::init()
     //}
 
 	//テクスチャファイル名を指定して、スプライトを作成
-	Sprite* sprite = Sprite::create("Bullet.png");
+	sprite = Sprite::create("Bullet.png");
+	//表示座標を設定
+	sprite->setPosition(Vec2(1000.0f, 600.0f));
+	//回転角を設定（45度）
+	sprite->setRotation(45.0f);
+	//拡縮を設定（横3倍、縦4倍）
+	sprite->setScale(3.0f, 4.0f);
+	//左右反転
+	sprite->setFlippedX(true);
+	//上下反転
+	sprite->setFlippedY(true);
+	//非表示にする
+	sprite->setVisible(true);
+	//色合いを設定
+	sprite->setColor(Color3B(255, 255, 100));
+	//不透明度を設定
+	sprite->setOpacity(255);
 	//シーンフラグにつなぐ
 	this->addChild(sprite);
+
+	sNum = 0;
+	vl[0] = Vec2(-1.0f, 0.0f);
+	vl[1] = Vec2(0.0f, -1.0f);
+	vl[2] = Vec2(1.0f, 0.0f);
+	vl[3] = Vec2(0.0f, 1.0f);
+
+	sp[0] = Vec2(100.0f, 600.0f);
+	sp[1] = Vec2(100.0f, 100.0f);
+	sp[2] = Vec2(1000.0f, 100.0f);
+	sp[3] = Vec2(1000.0f, 600.0f);
+
+	v = new Vec2(vl[0].x, vl[0].y);
+
+	counter = 0;
+
+	//updateが呼び出されるようにする
+    this->scheduleUpdate();
 
     return true;
 }
@@ -137,3 +171,42 @@ void HelloWorld::menuCloseCallback(Ref* pSender)
 
 
 }
+
+void HelloWorld::update(float delta)
+{
+	
+	//ここに更新処理を書く
+	//スプライトの現在座標を取得
+	Vec2 pos = sprite->getPosition();
+	//座標を移動させる
+	
+	if (pos == sp[sNum])
+	{
+		sNum++;
+		if (sNum >= 4)
+		{
+			sNum = 0;
+		}
+		v = new Vec2(vl[sNum].x, vl[sNum].y);
+	}
+
+	changeOpacity();
+
+	pos += Vec2(v->x, v->y);
+	//移動後の座標を反映
+	sprite->setPosition(pos);
+}
+
+void HelloWorld::changeOpacity()
+{
+	counter++;
+	float opacity = 255 - (counter / 300.0f * 255.0f);
+	if (opacity <= 0.0f)
+	{
+		counter = 0;
+		opacity = 255.0f;
+	}
+	sprite->setOpacity(opacity);
+}
+
+
